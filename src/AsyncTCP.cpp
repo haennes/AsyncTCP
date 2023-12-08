@@ -31,6 +31,7 @@ extern "C"{
 }
 #include "esp_task_wdt.h"
 
+static bool skip_packet = false;
 /*
  * TCP/IP Event Task
  * */
@@ -92,6 +93,9 @@ static uint32_t _closed_index = []() {
     return 1;
 }();
 
+void skip(bool should_skip){
+    skip_packet = should_skip;
+}
 
 static inline bool _init_async_event_queue(){
     if(!_async_queue){
@@ -152,6 +156,7 @@ static bool _remove_events_with_arg(void * arg){
 }
 
 static void _handle_async_event(lwip_event_packet_t * e){
+    if(skip_packet) return;
     if(e->arg == NULL){
         // do nothing when arg is NULL
         //ets_printf("event arg == NULL: 0x%08x\n", e->recv.pcb);

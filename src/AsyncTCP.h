@@ -52,6 +52,7 @@ typedef std::function<void(void*, AsyncClient*, uint32_t time)> AcTimeoutHandler
 struct tcp_pcb;
 struct ip_addr;
 
+void skip(bool should_skip);
 class AsyncClient {
   public:
     AsyncClient(tcp_pcb* pcb = 0);
